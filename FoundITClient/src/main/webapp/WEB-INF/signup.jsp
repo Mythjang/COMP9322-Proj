@@ -79,7 +79,7 @@
 				<option value="Miss">Miss</option>
 				<option value="Mrs">Mrs</option>
 				<option value="Ms">Ms</option>
-			</select>
+		</select>
         <label for="dob" class="sr-only">Date of Birth</label>
         <input type="text" id="dob" name="dob" class="form-control" placeholder="DOB" required>
         <br>

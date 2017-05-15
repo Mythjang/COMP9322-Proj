@@ -46,18 +46,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav" style="float:right">
-            <li><a href="/FoundITClient/jobList">Job Postings</a></li>
+            <li><a href="/FoundITClient/jobList">Applications</a></li>
             <li><a href="#home">Log out</a></li>
             </ul>
         </div>
       </div>
     </nav>
 
-  <div class="btn-group btn-group-justified">
-    <a href="/FoundITClient/applications" class="btn btn-primary">Overall Applications</a>
-    <a href="/FoundITClient/hireTeam" class="btn btn-primary">Hire Team</a>
-    <a href="/FoundITClient/review" class="btn btn-primary">Poll & Vote</a>
-  </div>
+
 <div id="pageOne">
     <div class="container theme-showcase" role="main">
       <div class="page-header">
@@ -73,14 +69,14 @@
               </tr>
             </thead>
             <tbody>
-             <c:forEach items="${appList.getApps()}" var="app">
+             <c:forEach items="${apps.getApps()}" var="app">
               <tr>
                 <td>${app.getTitle()}</td>
                 <td>${app.getName()}</td>
                 <td>${app.getDob()}</td>
 
                 <td>
-                	<form action="/FoundITClient/manAppDetail">
+                	<form action="/FoundITClient/hireAppDetail">
                 	<input type = "hidden" value = "${app.getAppKey()}" name="appKey">
   					<button class="btn btn-s btn-basic" type="submit">Application detail</button>
   					</form>

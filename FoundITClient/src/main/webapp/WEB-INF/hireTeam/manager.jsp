@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Application Page</title>
+    <title>Manager Page</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/FoundITClient/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -19,9 +19,7 @@
     <link href="/FoundITClient/resources/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="/FoundITClient/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="/FoundITClient/resources/css/theme.css" rel="stylesheet">
 
@@ -31,9 +29,9 @@
 
   </head>
 
-<body>
- 
- <nav class="navbar navbar-inverse navbar-fixed-top">
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -46,66 +44,82 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav" style="float:right">
-            <li><a href="/FoundITClient/jobList">Job Postings</a></li>
+            <li class="active"><a href="/FoundITClient/jobList">Job Postings</a></li>
             <li><a href="#home">Log out</a></li>
-            </ul>
+          </ul>
         </div>
       </div>
     </nav>
 
-  <div class="btn-group btn-group-justified">
-    <a href="/FoundITClient/applications" class="btn btn-primary">Overall Applications</a>
-    <a href="/FoundITClient/hireTeam" class="btn btn-primary">Hire Team</a>
-    <a href="/FoundITClient/review" class="btn btn-primary">Poll & Vote</a>
-  </div>
-<div id="pageOne">
     <div class="container theme-showcase" role="main">
-      <div class="page-header">
-        <h1>Applications</h1>
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Hello Dear Manager</h1>
+        <p>Welcome to use our system.</p>
       </div>
+
+
+      <div class="page-header">
+        <h1>Current Jobs</h1>
+      </div>
+      <div style="text-align:center">
+         <a style="margin:0 auto" href="createJ"><button type="button" class="btn btn-sm btn-blue">Add New Job</button></a>
+      </div>
+      <br/>
         <div class="col-md-12">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Name</th>
-                <th>DOB</th>
+                <th>Company Name</th>
+                <th>Salary Rate</th>
+                <th>Position Type</th>
+                <th>Location</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
-             <c:forEach items="${appList.getApps()}" var="app">
+             <c:forEach items="${jobs.getJobs()}" var="job">
               <tr>
-                <td>${app.getTitle()}</td>
-                <td>${app.getName()}</td>
-                <td>${app.getDob()}</td>
-
+                <td>${job.getCompanyName()}</td>
+                <td>${job.getSalaryRate()}</td>
+                <td>${job.getPositionType()}</td>
+                <td>${job.getLocation()}</td>
+                <td>${job.getStatus()}</td>
                 <td>
-                	<form action="/FoundITClient/manAppDetail">
-                	<input type = "hidden" value = "${app.getAppKey()}" name="appKey">
-  					<button class="btn btn-s btn-basic" type="submit">Application detail</button>
+                	<form action="/FoundITClient/jobDetail">
+                	<input type = "hidden" value = "${job.getKey()}" name="jobDetail">
+  					<button class="btn btn-s btn-basic" type="submit">Job detail</button>
   					</form>
   				</td>
                 <td>
+  				<td><form action="/FoundITClient/detail">
+  					<input type = "hidden" value = "${job.getKey()}" name="detail">
+  					<button class="btn btn-s btn-basic" type = "submit">Recruit Management</button>
+  				</form></td>
+                <td><form action="deleteJob">
+                	<input type = "hidden" value = "${job.getKey()}" name="delete">
+                	<button  type="submit" style="display:${job.getStatus()=='open' or job.getStatus()=='close'  ? 'inline':'none'}" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </form></td>
               </tr>
             </c:forEach>
             </tbody>
           </table>
         </div>
       </div>
-      </div>
+
+
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="/FoundITClient/resources/js/bootstrap.min.js"></script>
-    <script src="/FoundITClient/resources/js/docs.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="/FoundITClient/resources/js/ie10-viewport-bug-workaround.js"></script>
-
- </body>
-  
-  
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>
 

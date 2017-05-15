@@ -60,7 +60,7 @@ public class AuthorityController {
 		else if(type.equals("candidate")){
 			return "redirect:/availableJob";
 		}
-		return null;	
+		return "redirect:/waittingApp";	
 	}
 	
 	@RequestMapping(value="/invalid")

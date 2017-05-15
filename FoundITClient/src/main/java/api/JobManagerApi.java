@@ -21,6 +21,7 @@ import dao.AppList;
 import dao.JobsDao;
 import model.Application;
 import model.Job;
+import model.Review;
 
 public class JobManagerApi {
 static final String REST_URI = "http://localhost:8080/JobMServer";
@@ -211,5 +212,40 @@ static final String REST_URI = "http://localhost:8080/JobMServer";
 		jobClient.put(form);
 		System.out.println("update app now --");
 		
+	}
+
+
+
+
+
+	public static void createReview(String email, String appKey, String comments, String decision) {
+		WebClient jobClient = WebClient.create(REST_URI);
+		Form form = new Form();
+		jobClient.header("securityKey", "i-am-foundit");
+		jobClient.header("shortKey","app-reviewer");
+		form.param("email", email);
+		form.param("appKey", appKey);
+		form.param("comments", comments);
+		form.param("decision", decision);
+		jobClient.path("/reviews").type(MediaType.APPLICATION_FORM_URLENCODED);
+		jobClient.post(form);
+	}
+
+
+
+
+
+	public static AppList getPassedApplication(String jobId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+
+	public static List<Review> searchReview(String email, String appKey) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

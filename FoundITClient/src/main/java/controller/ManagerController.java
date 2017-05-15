@@ -18,6 +18,7 @@ import DB.DBOperation;
 import api.JobManagerApi;
 import dao.AppList;
 import dao.JobsDao;
+import model.Application;
 import model.Job;
 import model.User;
 
@@ -66,7 +67,6 @@ public class ManagerController {
 			User user = new User();
 			user.setEmail(email);
 			user.setPassword(password);
-			System.out.println("aaaaaaaaa"+(String) httpSession.getAttribute("userEmail"));
 			user.setWorkFor((String) httpSession.getAttribute("userEmail"));
 			user.setType("hireTeam");
 			System.out.println(user.toString());
@@ -100,12 +100,14 @@ public class ManagerController {
 	@RequestMapping("/detail")
 	public ModelAndView detail(HttpSession httpSession, @RequestParam(value="detail") String id) throws IOException{
 		httpSession.setAttribute("currId", id);
-		return new ModelAndView("manager/applicationPage");
+		AppList appList = JobManagerApi.searchApps(null, id,"app-manager");
+		return new ModelAndView("manager/applicationPage","appList", appList);
+		//return new ModelAndView("manager/applicationPage");
 		
 	}
 	@RequestMapping("/applications")
 	public ModelAndView application(HttpSession httpSession) throws IOException{
-		String jobId = (String)httpSession.getAttribute("jobId");
+		String jobId = (String)httpSession.getAttribute("currId");
 		AppList appList = JobManagerApi.searchApps(null, jobId,"app-manager");
 		
 		return new ModelAndView("manager/applicationPage","appList", appList);
@@ -129,7 +131,6 @@ public class ManagerController {
 	
 	
 	@RequestMapping("/deleteOrChangeJob")
-	
 	public String deleteOrChangeJob(HttpServletRequest request,@ModelAttribute("job") Job job) throws IOException{
 		System.out.println(job.toString());
 		if(request.getParameter("action").equals("change")){
@@ -142,5 +143,17 @@ public class ManagerController {
 		}
 		
 	}
+	@RequestMapping("/manAppDetail")
+	public ModelAndView manAppDetail(@RequestParam(value="appKey") String appKey) throws IOException{
+		Application app = JobManagerApi.getApplicationByKey(appKey);
+		return new ModelAndView("manager/manAppDetailPage","app",app);
+	}
 	
+	
+//	@RequestMapping("/passedApp")
+//	public ModelAndView getPassApp(HttpSession httpSession) throws IOException{
+//		String jobId = (String)httpSession.getAttribute("currId");
+//		AppList apps = JobManagerApi.getPassedApplication(jobId);
+//		return new ModelAndView("manager/manAppDetailPage","app",apps);
+//	}
 }

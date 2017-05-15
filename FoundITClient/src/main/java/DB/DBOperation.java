@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Application;
 import model.User;
 
 public class DBOperation{
@@ -50,6 +49,8 @@ public class DBOperation{
 			String correctPass = rs.getString("password");
 			type = rs.getString("type");
 			rs.close();
+			System.out.println(correctPass);
+			System.out.println(password);
 			if (password.equals(correctPass)) return type;
 		}catch(SQLException e){
 			
@@ -160,5 +161,20 @@ public class DBOperation{
 	}
 
 
+	public static String getWorkFor(String email) throws ClassNotFoundException, SQLException{
+		Connection conn = DataSource.getConnection();
+		System.out.println("Opened database successfully");
+		Statement stmt = conn.createStatement();
+		String sql = "Select workFor from USERS where email="+"'"+email+"';" ;
+		System.out.println(sql);
+		ResultSet rs = stmt.executeQuery(sql); 
+		String workFor = rs.getString("workFor");
+		rs.close();
+		stmt.close();
+		conn.close();
+		DataSource.returnConnection(conn);
+		return workFor;
+	}
+		
 		
 }
