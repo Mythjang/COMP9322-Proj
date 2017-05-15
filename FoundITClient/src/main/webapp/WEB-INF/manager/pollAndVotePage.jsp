@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -11,12 +10,12 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Polling Result</title>
+    <title>Application Page</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/FoundITClient/resources/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
-    <link href="/FoundITClient/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="/FoundITClient/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
@@ -31,73 +30,77 @@
 
   <body>
 
- 
+    <!-- Fixed navbar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Poll and Vote</a>
+          <a class="navbar-brand" href="#">FoundIT APP</a>
         </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav" style="float:right">
+            <li><a href="manager.jsp">Job Postings</a></li>
+            <li><a href="application.jsp">Applications</a></li>
+            <li><a href="hireteam.jsp">Hire Team</a></li>
+            <li class="active"><a href="poll.jsp">Poll & Vote</a></li>
+            <li><a href="#home">Log out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container theme-showcase" role="main">
 
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
+      <div class="page-header">
         <h1>Poll and Vote</h1>
       </div>
-
-
-      <div class="page-header">
-        <h1>Current Voting</h1>
-      </div>
+      <br/>
       <div style="text-align:center">
-         <a style="margin:0 auto" href="#"><button type="button" class="btn btn-sm btn-blue">Add your voting</button></a>
+       	<button  type="button" class="btn btn-ms btn-blue" style="margin:0 auto">Create a Poll</button>
       </div>
       <br/>
-   
-        <div class="col-md-12">
-      
+      <div class="page-header">
+        <h2>Events List</h2>
+      </div>
+        <div class="col-md-8">
           <table class="table table-striped">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Email</th>
-                <th>Poll Title</th>
-                <th>Description</th>
-                <th>Comments</th>
-                <th>Options</th>
-                <th>Final Choice</th>
+                <th>Poll Name</th>
+                <th>Date</th>
+                <th>Place</th>
               </tr>
             </thead>
             <tbody>
-             <c:forEach items="${polls.getPolls()}" var="poll">
               <tr>
-                <td>${poll.getKey()}</td>
-                <td>${poll.getEmail()}</td>
-                <td>${poll.getTitle()}</td>
-                <td>${poll.getDescription()}</td>
-                <td>${poll.getComments()}</td>
-                <td>${poll.getOptions()}</td>
-                <td>${poll.getFinalChoice()}</td>
-                <td><form action="deletePoll">
-                	<input type = "hidden" value = "${poll.getKey()}" name="delete">
-                	<button  type="submit" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </form></td>
+                <td>1</td>
+                <td>COMP9322</td>
+                <td>2017-5-5</td>
+                <td>CLB</td>
+                <td><button type="button" class="btn btn-xs btn-default">Details</button></td>
+                <td><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
               </tr>
-            </c:forEach>
+              <tr>
+                <td>2</td>
+                <td>COMP9334</td>
+                <td>2017-5-6</td>
+                <td>K17</td>
+                <td><button type="button" class="btn btn-xs btn-default">Details</button></td>
+                <td><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
+              </tr>
             </tbody>
           </table>
- 
         </div>
-      </div>
 
-
-
+    </div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript
@@ -105,10 +108,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/docs.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
 

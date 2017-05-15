@@ -31,7 +31,6 @@
 
   <body>
 
- 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -68,13 +67,10 @@
          <a style="margin:0 auto" href="createJ"><button type="button" class="btn btn-sm btn-blue">Add New Job</button></a>
       </div>
       <br/>
-   
         <div class="col-md-12">
-      
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
                 <th>Company Name</th>
                 <th>Salary Rate</th>
                 <th>Position Type</th>
@@ -85,28 +81,32 @@
             <tbody>
              <c:forEach items="${jobs.getJobs()}" var="job">
               <tr>
-                <td>${job.getKey()}</td>
                 <td>${job.getCompanyName()}</td>
                 <td>${job.getSalaryRate()}</td>
                 <td>${job.getPositionType()}</td>
                 <td>${job.getLocation()}</td>
                 <td>${job.getStatus()}</td>
-  				<td><form action="detail">
+                <td>
+                	<form action="/FoundITClient/jobDetail">
+                	<input type = "hidden" value = "${job.getKey()}" name="jobDetail">
+  					<button class="btn btn-s btn-basic" type="submit">Job detail</button>
+  					</form>
+  				</td>
+                <td>
+  				<td><form action="/FoundITClient/detail">
   					<input type = "hidden" value = "${job.getKey()}" name="detail">
-  					<button class="btn btn-xs btn-default" type = "submit">details</button>
+  					<button class="btn btn-s btn-basic" type = "submit">Recruit Management</button>
   				</form></td>
-                <td><form action="delete">
+                <td><form action="deleteJob">
                 	<input type = "hidden" value = "${job.getKey()}" name="delete">
-                	<button  type="submit" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                	<button  type="submit" style="display:${job.getStatus()=='open' or job.getStatus()=='close'  ? 'inline':'none'}" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </form></td>
               </tr>
             </c:forEach>
             </tbody>
           </table>
- 
         </div>
       </div>
-
 
 
 

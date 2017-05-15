@@ -41,14 +41,14 @@
       <form class="form-signin" action = "addJob" name = "job" >
         <label for="companyName" class="sr-only">CompanyName</label>
         <input type="text" id="companyName" name="companyName" class="form-control" placeholder="Company Name" required autofocus>
-        <label for="salaryRate" class="sr-only">Salary Rate</label>
-        <input type="text" id="salaryRate" name="salaryRate" class="form-control" placeholder="Salary Rate" required>
+        <label for="salaryRate"  class="sr-only">Salary Rate</label>
+        <input type="number" id="salaryRate"  name="salaryRate" class="form-control" placeholder="Salary Rate" required>
         <label for="positionType" class="sr-only">Position Type</label>
         <input type="text" name="positionType" id="positionType" class="form-control" placeholder="Position Type" required>
         <label for="location" class="sr-only">Location</label>
         <input type="text" name= "location" id="location" class="form-control" placeholder="Location" required>
-        <label for="details" class="sr-only">Details</label>
-        <textarea id="details" name="details" class="form-control" rows="3" placeholder="Details" required></textarea>
+        <label for="detail" class="sr-only">Details</label>
+        <textarea id="detail" name="detail" class="form-control" rows="3" placeholder="Details" required></textarea>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Add Job</button>
          
       </form>

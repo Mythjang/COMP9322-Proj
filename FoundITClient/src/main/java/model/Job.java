@@ -2,7 +2,7 @@ package model;
 
 
 public class Job {
-	private long key;
+	private String key;
 	private String location;
 	private String status = "open";
 	private double salaryRate;
@@ -15,7 +15,7 @@ public class Job {
 	}
 
 
-	public Job(long key, String location, String status, double salaryRate, String positionType, String companyName,
+	public Job(String key, String location, String status, double salaryRate, String positionType, String companyName,
 			String detail) {
 		this.key = key;
 		this.location = location;
@@ -31,7 +31,7 @@ public class Job {
 
 
 
-	public long getKey() {
+	public String getKey() {
 		return key;
 	}
 
@@ -40,7 +40,7 @@ public class Job {
 
 
 
-	public void setKey(long key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 

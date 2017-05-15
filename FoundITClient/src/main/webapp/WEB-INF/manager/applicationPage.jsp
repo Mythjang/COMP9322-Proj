@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -9,29 +10,30 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-	
+
     <title>Application Page</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="/FoundITClient/resources/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
-    <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/FoundITClient/resources/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
+    <link href="/FoundITClient/resources/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Custom styles for this template -->
-    <link href="../css/theme.css" rel="stylesheet">
+    <link href="/FoundITClient/resources/css/theme.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../js/ie-emulation-modes-warning.js"></script>
+    <script src="/FoundITClient/resources/js/ie-emulation-modes-warning.js"></script>
 
   </head>
 
-  <body>
-
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+<body>
+ 
+ <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -44,74 +46,71 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav" style="float:right">
-            <li><a href="manager.jsp">Job Postings</a></li>
-            <li><a href="application.jsp">Applications</a></li>
-            <li><a href="hireteam.jsp">Hire Team</a></li>
-            <li class="active"><a href="poll.jsp">Poll & Vote</a></li>
+            <li><a href="/FoundITClient/jobList">Job Postings</a></li>
             <li><a href="#home">Log out</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
+            </ul>
+        </div>
       </div>
     </nav>
 
+  <div class="btn-group btn-group-justified">
+    <a href="/FoundITClient/applications" class="btn btn-primary">Application</a>
+    <a href="/FoundITClient/hireTeam" class="btn btn-primary">Hire Team</a>
+    <a href="/FoundITClient/review" class="btn btn-primary">Poll & Vote</a>
+  </div>
+<div id="pageOne">
     <div class="container theme-showcase" role="main">
-
       <div class="page-header">
-        <h1>Poll and Vote</h1>
+        <h1>Applications</h1>
+      </div>
+      
+            <div style="text-align:center">
+         <a style="margin:0 auto" href="createJ"><button type="button" class="btn btn-sm btn-blue">Add New Job</button></a>
       </div>
       <br/>
-      <div style="text-align:center">
-       	<button  type="button" class="btn btn-ms btn-blue" style="margin:0 auto">Create a Poll</button>
-      </div>
-      <br/>
-      <div class="page-header">
-        <h2>Events List</h2>
-      </div>
-        <div class="col-md-8">
+        <div class="col-md-12">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Poll Name</th>
-                <th>Date</th>
-                <th>Place</th>
+                <th>Title</th>
+                <th>Name</th>
+                <th>DOB</th>
               </tr>
             </thead>
             <tbody>
+             <c:forEach items="${appList.getApps()}" var="app">
               <tr>
-                <td>1</td>
-                <td>COMP9322</td>
-                <td>2017-5-5</td>
-                <td>CLB</td>
-                <td><button type="button" class="btn btn-xs btn-default">Details</button></td>
-                <td><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
+                <td>${app.getTile()}</td>
+                <td>${app.getName()}</td>
+                <td>${app.getDob()}</td>
+
+                <td>
+                	<form action="/FoundITClient/jobDetail">
+                	<input type = "hidden" value = "${app.getAppKey()}" name="appDetail">
+  					<button class="btn btn-s btn-basic" type="submit">Application detail</button>
+  					</form>
+  				</td>
+                <td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>COMP9334</td>
-                <td>2017-5-6</td>
-                <td>K17</td>
-                <td><button type="button" class="btn btn-xs btn-default">Details</button></td>
-                <td><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></td>
-              </tr>
+            </c:forEach>
             </tbody>
           </table>
         </div>
-
-    </div> <!-- /container -->
-
+      </div>
+      </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/docs.min.js"></script>
+    <script src="/FoundITClient/resources/js/bootstrap.min.js"></script>
+    <script src="/FoundITClient/resources/js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../js/ie10-viewport-bug-workaround.js"></script>
-  </body>
+    <script src="/FoundITClient/resources/js/ie10-viewport-bug-workaround.js"></script>
+
+ </body>
+  
+  
 </html>
 

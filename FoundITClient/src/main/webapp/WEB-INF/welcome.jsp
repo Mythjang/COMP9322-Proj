@@ -1,4 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -36,7 +38,7 @@
 
     <div class="container">
 
-      <form class="form-signin " action="login">
+      <form class="form-signin " action="/FoundITClient/login">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" name = "email" placeholder="Email address" required autofocus>
@@ -47,7 +49,7 @@
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
-      <a class="btn btn-lg btn-primary btn-block" type="submit" style="max-width: 300px; margin: auto" href="signup.jsp"> Sign up</a>
+      <a class="btn btn-lg btn-primary btn-block" type="submit" style="max-width: 300px; margin: auto" href="signup"> Sign up</a>
               <center>${resp}</center>
     </div> <!-- /container -->
 

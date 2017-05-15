@@ -38,7 +38,16 @@
       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
+<style type="text/css">
+/**
+ * Override feedback icon position
+ * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
+ */
+#eventForm .form-control-feedback {
+    top: 0;
+    right: -15px;
+}
+</style>
   <body onload = "init()">
 
     <div class="container">
@@ -53,47 +62,31 @@
 				<option value="candidate">Candidate</option>
 				<option value="hiringTeam">Hiring Team</option>
 			</select>
-		</div>
-		<label for="company" class="sr-only">Company</label>
-        <input type="text" id="company" class="form-control"  name = "companyName" value="" placeholder="Company Name" >
+			</div>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email Address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" onkeyup='check();' required>
-        
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"  required>
         <label for="inputPassword" class="sr-only">Confirm Password</label>
         <input type="password" name="comfirmPassword" id="comfirmPassword" onkeyup='check();' class="form-control" placeholder="Comfirm Password" required>
        	 <label id='message'></label>
         <label for="name" class="sr-only">Name</label>
         <input type="text" id="name"  name="name" class="form-control" placeholder="Name" required>
-        <label for="sex" class="sr-only">Sex</label>
-        <input type="text" id="sex" name="sex" class="form-control" placeholder="Sex" required>
+        <label for="sex" class="sr-only">title</label>
+        <select class="form-control" id="title" name="title" required>
+	 			<option disabled="disabled" value="" selected="selected">Please select your title</option>
+				<option value="Mr">Mr</option>
+				<option value="Miss">Miss</option>
+				<option value="Mrs">Mrs</option>
+				<option value="Ms">Ms</option>
+			</select>
         <label for="dob" class="sr-only">Date of Birth</label>
         <input type="text" id="dob" name="dob" class="form-control" placeholder="DOB" required>
-        <label for="introduction" class="sr-only">Introduction</label>
-        <input type="text" id="introduction" name="introduction" class="form-control" placeholder="Introduction" required>
         <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
       </form>
+    </div>
       
-      
-      <style type="text/css">
-/**
- * Override feedback icon position
- * See http://formvalidation.io/examples/adjusting-feedback-icon-position/
- */
-#eventForm .form-control-feedback {
-    top: 0;
-    right: -15px;
-}
-</style>
-      
-
-    <!-- Form code begins -->
-
-
-
-
 
 <script>
 $(document).ready(function(){
@@ -108,7 +101,6 @@ $(document).ready(function(){
   date_input.datepicker(options);
 })
 </script>
-      
       	  <script>
       		var inputCompany = document.getElementById('company');
       		var selectType = document.getElementById('type');
@@ -123,7 +115,6 @@ $(document).ready(function(){
        	              }
            }
        </script>
-    </div> <!-- /container -->
 <script>
 var check = function() {
   if (document.getElementById('inputPassword').value ==
