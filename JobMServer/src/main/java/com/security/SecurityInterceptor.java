@@ -62,11 +62,13 @@ public class SecurityInterceptor implements ContainerRequestFilter
 
 
 		    if(shortKey==null || securityKey==null || shortKey.isEmpty() || securityKey.isEmpty()){
+		    	System.out.println("de1");
 		    	requestContext.abortWith(ACCESS_DENIED);
 		    	return;
 		    	
 		    }
 		    if(!UserDao.instance.getUsers().contains(securityKey.get(0))){
+		    	System.out.println("de2");
 		    	requestContext.abortWith(ACCESS_DENIED);
 		    	return;
 		    }
@@ -78,9 +80,11 @@ public class SecurityInterceptor implements ContainerRequestFilter
 				//Is user valid?
 				if(!rolesSet.contains(shortKey.get(0)))
 				{
+					System.out.println("de3");
 					requestContext.abortWith(ACCESS_DENIED);
 			    	return;
 				}
+				System.out.println("succ");
 			}
 			
 	

@@ -27,8 +27,18 @@ import org.springframework.http.ResponseEntity;
 
 import com.customException.CustomException;
 import com.dao.JobsList;
+import com.db.DBOperationApplications;
 import com.db.DBOperationJobs;
+import com.db.DBOperationReview;
 import com.model.Job;
+
+
+
+
+
+
+
+
 
 
 @Path("/jobs")
@@ -43,12 +53,15 @@ public class JobManagement {
 	 *  Return the list of jobs
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
+	 * @throws  
 	 */
 	@PermitAll
 	@GET
 	@Produces("application/json")
 	public Response getJobs() throws ClassNotFoundException, SQLException {
-		// DBOperationJobs.createJobDB();
+//		 DBOperationJobs.createJobDB();
+//		DBOperationReview.DBOperationReviewDB();
+//		 DBOperationApplications.createApplicationDB();
 		 //DBOperation.addJob(System.currentTimeMillis(), "12@gmail.com","bb", 3, "c1r", "aa", "v", "n/a");
 		Response.ResponseBuilder rb = Response.ok(DBOperationJobs.getAllJobs());
 		return rb.build();
@@ -77,7 +90,7 @@ public class JobManagement {
 
 
 	// search jobs
-	@RolesAllowed({Roles.CANDIDATE,Roles.MANAGER,Roles.REVIEWER})
+	@RolesAllowed({Roles.MANAGER,Roles.CANDIDATE,Roles.REVIEWER})
 	@GET
 	@Path("/search")
 	@Produces({MediaType.APPLICATION_JSON})
@@ -88,11 +101,14 @@ public class JobManagement {
 		@QueryParam ("positionType") String positionType,
 		@QueryParam ("location") String location,
 		@QueryParam ("status") String status
-	) throws Exception {
+	) throws ClassNotFoundException, SQLException, CustomException {
+		//DBOperationReview.DBOperationReviewDB();
+		System.out.println("companyName="+ companyName);
+		System.out.println("email="+ email);
+		System.out.println("status="+ status);
 		JobsList jobs = DBOperationJobs.searchJob(email, companyName, salaryRate, positionType, location,status);
-		if (jobs == null) return new ResponseEntity<JobsList>(HttpStatus.NO_CONTENT);
-			//res = Response.status(Response.Status.NO_CONTENT).build();
-		else return new ResponseEntity<JobsList>(jobs,HttpStatus.OK);
+		System.out.println(jobs.toString());
+		return new ResponseEntity<JobsList>(jobs,HttpStatus.OK);
 		
 	}
 
@@ -120,6 +136,7 @@ public class JobManagement {
 	 * @param status
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
+	 * @throws CustomException 
 	 * @throws IOException
 	 */
 	@RolesAllowed(Roles.MANAGER)
@@ -132,7 +149,7 @@ public class JobManagement {
 			@FormParam("positionType") String positionType,
 			@FormParam("location") String location,
 			@FormParam("detail") String detail,
-			@FormParam("status") String status) throws ClassNotFoundException, SQLException 
+			@FormParam("status") String status) throws ClassNotFoundException, SQLException, CustomException 
 	{
 		String id = DBOperationJobs.addJob(email,companyName,salaryRate,positionType,location,detail,status);
 		return new ResponseEntity<String>(id, HttpStatus.CREATED);
@@ -157,12 +174,13 @@ public class JobManagement {
 	 * @param id
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
+	 * @throws CustomException 
 	 */
 	@RolesAllowed(Roles.MANAGER)
 	@DELETE
 	@Path("{job}")
 	@Produces({MediaType.APPLICATION_JSON})
-	public ResponseEntity<String> deleteJob(@PathParam("job") String id) throws ClassNotFoundException, SQLException {
+	public ResponseEntity<String> deleteJob(@PathParam("job") String id) throws ClassNotFoundException, SQLException, CustomException {
 		DBOperationJobs.deleteJobById(id);
 		
 		return new ResponseEntity<String>(id, HttpStatus.OK);

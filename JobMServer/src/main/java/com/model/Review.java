@@ -1,38 +1,35 @@
 package com.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Review {
-	private int revkey;
-	private int appID;
-	private String details;
-	private String comments;
+	private String reKey;
+	private String appKey;
+	private String reviewerEmail;
 	private String decision;
+	private String comments;
+	private List<Link> link = new ArrayList<Link>();
 	
-	
-	public Review(int revkey, int appID, String details, String comments, String decision) {
-		super();
-		this.revkey = revkey;
-		this.appID = appID;
-		this.details = details;
-		this.comments = comments;
-		this.decision = decision;
+	public Review() {
 	}
-	public int getRevkey() {
-		return revkey;
+	public String getReKey() {
+		return reKey;
 	}
-	public void setRevkey(int revkey) {
-		this.revkey = revkey;
+	public void setReKey(String key) {
+		this.reKey = key;
 	}
-	public int getAppID() {
-		return appID;
+	public String getAppKey() {
+		return appKey;
 	}
-	public void setAppID(int appID) {
-		this.appID = appID;
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
 	}
-	public String getDetails() {
-		return details;
+	public String getReviewerEmail() {
+		return reviewerEmail;
 	}
-	public void setDetails(String details) {
-		this.details = details;
+	public void setReviewerEmail(String reviewerEmail) {
+		this.reviewerEmail = reviewerEmail;
 	}
 	public String getComments() {
 		return comments;
@@ -46,5 +43,14 @@ public class Review {
 	public void setDecision(String decision) {
 		this.decision = decision;
 	}
+	public List<Link> getLink() {
+		return link;
+	}
+	public void setLink(List<Link> link) {
+		this.link = link;
+	}
+
+	
+	
 	
 }

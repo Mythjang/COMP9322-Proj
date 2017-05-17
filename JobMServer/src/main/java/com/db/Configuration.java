@@ -19,7 +19,7 @@ public class Configuration {
 	 }
 	  
 	 private void init() {
-	  DB_URL = "jdbc:sqlite:jobsManage.db";
+	  DB_URL = "jdbc:sqlite:./jobsManage.db";
 	  DB_DRIVER = "org.sqlite.JDBC";
 	  DB_MAX_CONNECTIONS = 50;
 	 }

@@ -24,23 +24,23 @@ public class DBOperationJobs
 {
  
 	
-	 /**
-	  * get job by job id
-	  * @param id
-	  * @return a single job
-	  * @throws ClassNotFoundException
-	  * @throws SQLException
-	 * @throws CustomException 
-	 * @throws UserWebServiceException 
-	  */
+		/**
+		 * 
+		 * @param id
+		 * @return
+		 * @throws ClassNotFoundException
+		 * @throws SQLException
+		 * @throws CustomException
+		 */
 		public static Job getJobById(String id) throws ClassNotFoundException, SQLException, CustomException {
 			Connection conn = DataSource.getConnection();
 			Job job = new Job();
 			System.out.println("Creating statement select job");
-			Statement stmt = conn.createStatement();
+			Statement stmt =null;
 			String sql = "SELECT * FROM JOBS where JOBS.jobId = "+"'"+id+"'";
 			System.out.println(sql);
 			try{
+				stmt = conn.createStatement();
 				job = new Job();
 				ResultSet rs = stmt.executeQuery(sql);
 				String jobId = rs.getString("jobId");
@@ -61,10 +61,9 @@ public class DBOperationJobs
 			}
 			catch (SQLException e){
 				throw new CustomException(Status.NOT_FOUND,"job not exists");
-				
 			}finally{
 				stmt.close();
-				conn.close();
+			//	conn.close();
 				DataSource.returnConnection(conn);
 			}
 			return job;
@@ -82,7 +81,8 @@ public class DBOperationJobs
 		Connection conn = DataSource.getConnection();
 		Statement stmt = null;
 		List<Job> jobs = new ArrayList<Job>();
-		System.out.println("Creating statement select all jobs");
+		try{
+			System.out.println("Creating statement select all jobs");
 		stmt = conn.createStatement();
 		String sql = "SELECT * FROM JOBS;";
 		ResultSet rs = stmt.executeQuery(sql);
@@ -104,10 +104,14 @@ public class DBOperationJobs
 			jobs.add(job);
 		}
 		rs.close();
+		}catch(SQLException e){
+			
+		}finally{
+			
 		stmt.close();
-		conn.close();
+	//	conn.close();
 		DataSource.returnConnection(conn);
-
+		}
 		return new JobsList(jobs);
 	}
 
@@ -115,38 +119,179 @@ public class DBOperationJobs
 	
 
 	public static String addJob(String email, String companyName, double salaryRate, String positionType, String location,
-		String detail, String status) throws ClassNotFoundException, SQLException {
+		String detail, String status) throws ClassNotFoundException, SQLException, CustomException {
 		Connection conn = DataSource.getConnection();
 		String id = UUID.randomUUID().toString();
-		System.out.println("Opened database successfully");
 		Statement stmt = conn.createStatement();
 		String sql = "INSERT INTO JOBS (jobId,email,companyName,salaryRate,positionType,location,detail,status) " +
 		"VALUES ('"+id+"','"+email+"','"+companyName+"',"+salaryRate+",'"+positionType+"','"+location+"','"+detail+"','"+status+ "');"; 
-		System.out.println(sql);
 		stmt.executeUpdate(sql);
 		stmt.close();
-		conn.close();
+	//	conn.close();
 		DataSource.returnConnection(conn);
 	    System.out.println("Records created successfully");
 	    return String.valueOf(id);
 	}
 
 	
-	public static void deleteJobById(String id) throws ClassNotFoundException, SQLException {
+	public static void deleteJobById(String id) throws ClassNotFoundException, SQLException, CustomException {
+		Job job = DBOperationJobs.getJobById(id);
+		if(!job.getStatus().equals("open") && !job.getStatus().equals("close"))
+			throw new CustomException(Status.BAD_REQUEST,"Status of job is "+job.getStatus()+", which not satisfy condition of delete"); 
 		Connection conn = DataSource.getConnection();
-	      System.out.println("Opened database successfully");
-	      Statement stmt = conn.createStatement();
-	      String sql = "delete from JOBS where jobId="+"'"+id+"'" ;
-	      System.out.println(sql);
-	      stmt.executeUpdate(sql);
-	      stmt.close();
-	      conn.close();
-	      DataSource.returnConnection(conn);
+		Statement stmt = conn.createStatement();
+		String sql = "delete from JOBS where jobId="+"'"+id+"'" ;
+		stmt.executeUpdate(sql);
+		stmt.close();
+	//	conn.close();
+		System.out.println("Opened database successfully");
+		DataSource.returnConnection(conn);
 	}
 	
 	
 
 
+
+	public static JobsList searchJob(String email, String companyName, double salaryRate, String positionType, String location,
+			String status) throws ClassNotFoundException, SQLException, CustomException {
+		Connection conn = DataSource.getConnection();
+		List<Job> jobs = new ArrayList<Job>();
+		System.out.println("Creating statement search jobs");
+		Statement stmt = null;
+		
+		String sql = "SELECT * FROM JOBS where";
+		int i = 0;
+		if(email != null && !email.equals("")){
+			sql+= " email="+"'"+email+"'";
+			i++;
+		}
+		if(companyName != null && !companyName.equals("")) {
+			if(i!=0) sql+=" and";
+			sql+= " companyName like "+"'%"+companyName+"%'";
+			i++;
+		}
+		if(salaryRate != -1){
+			if(i!=0) sql+=" and";
+			sql+= " salaryRate >= "+salaryRate;
+			i++;
+		}
+		if(positionType != null && !positionType.equals("")){
+			if(i!=0) sql+=" and";
+			sql+= " positionType like "+"'%"+positionType+"%'";
+			i++;
+		}
+		if(location != null && !location.equals("")){
+			if(i!=0) sql+=" and";
+			sql+= " location like "+"'%"+location +"%'";
+			i++;
+		}
+		if(status != null && !status.equals("")){
+			if(i!=0) sql+=" and";
+			sql+= " status ="+"'"+status +"'";
+			i++;
+		}
+		System.out.println(sql);System.out.println(sql);System.out.println(sql);
+		if(i==0) throw new CustomException(Status.BAD_REQUEST,"at least one parameter for search");
+		sql +=";";
+		System.out.println(sql);
+		
+		try{
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			Job job;
+	
+			while(rs.next()){
+				job = new Job();
+				String id = rs.getString("jobId");
+				job.setKey(id);
+				job.setCompanyName(rs.getString("companyName"));
+				job.setSalaryRate(rs.getDouble("salaryRate"));
+				job.setPositionType(rs.getString("positionType"));
+				job.setLocation(rs.getString("location"));
+				job.setDetail(rs.getString("detail"));
+				job.setStatus(rs.getString("status"));
+				List <Link> links = new ArrayList<Link>();
+				Link k = new Link("/jobs/"+id,"details");
+				links.add(k);
+				job.setLink(links);
+				jobs.add(job);
+			}
+			rs.close();
+		}catch(SQLException e){
+			throw new CustomException(Status.BAD_REQUEST,"jobs not exists");
+		}finally{
+			stmt.close();
+		//	conn.close();
+			DataSource.returnConnection(conn);
+		}
+		return new JobsList(jobs);
+	}
+
+
+	public static Job updateJobById(String id,String companyName, double salaryRate, String positionType,
+			String location, String detail, String status) throws ClassNotFoundException, SQLException, CustomException {
+		
+		Job job = DBOperationJobs.getJobById(id);
+		int preStatus = StatusDao.instance.getStatus().get(job.getStatus());
+		int currStatus = StatusDao.instance.getStatus().get(status);
+		
+		if(preStatus>currStatus) throw new CustomException(Status.BAD_REQUEST,"can not roll status back"); 
+	
+		Connection conn =  DataSource.getConnection();
+
+	    Statement stmt = conn.createStatement();
+	    //try{
+		    String sql = "UPDATE JOBS" +
+		              " set companyName="+"'"+companyName+"'"+", salaryRate="+salaryRate+", positionType="+"'"+positionType+"'"+
+		              ", location="+"'"+location+"'"+", detail="+"'"+detail+"'"+", status="+"'"+status+"'"+
+		              " where jobId="+"'"+id+"'";
+		    System.out.println(sql);
+		    stmt.executeUpdate(sql);
+		    job = DBOperationJobs.getJobById(id);
+		    System.out.println("job update Successful");
+		//}catch(SQLException e){
+		//	throw  new CustomException(Status.BAD_REQUEST,"Salary rate must be real number"); 
+		//}finally{
+		    stmt.close();
+		 //   conn.close();
+		    DataSource.returnConnection(conn);
+	//	}
+		return job;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public static Job updateJobStatusById(String id) throws ClassNotFoundException, SQLException, CustomException {
+		
+		Job job = DBOperationJobs.getJobById(id);
+		
+		Connection conn =  DataSource.getConnection();
+
+	    Statement stmt = conn.createStatement();
+	    //try{
+		    String sql = "UPDATE JOBS" +
+		              " set status= 'appReceived'"+
+		              " where jobId="+"'"+id+"'";
+		    System.out.println(sql);
+		    stmt.executeUpdate(sql);
+		    job = DBOperationJobs.getJobById(id);
+		    System.out.println("job status update Successful");
+		//}catch(SQLException e){
+		//	throw  new CustomException(Status.BAD_REQUEST,"Salary rate must be real number"); 
+		//}finally{
+		    stmt.close();
+		  //  conn.close();
+		    DataSource.returnConnection(conn);
+	//	}
+		return job;
+	}
+	
+	
+	
 	
 	public static void createJobDB() throws ClassNotFoundException, SQLException{
 		Connection conn = DataSource.getConnection();
@@ -163,120 +308,10 @@ public class DBOperationJobs
 				" status            TEXT)"; 
 		stmt.executeUpdate(sql);
 		stmt.close();
-		conn.close();
+		//conn.close();
 		DataSource.returnConnection(conn);
 	    System.out.println("jobTable created successfully");
 	}
 
-
-	public static JobsList searchJob(String email, String companyName, double salaryRate, String positionType, String location,
-			String status) throws ClassNotFoundException, SQLException {
-		Connection conn = DataSource.getConnection();
-		List<Job> jobs = new ArrayList<Job>();
-		System.out.println("Creating statement search jobs");
-		Statement stmt = conn.createStatement();
-		String sql = "SELECT * FROM JOBS where";
-		int i = 0;
-		if(email != null){
-			sql+= " email="+"'"+email+"'";
-			i++;
-		}
-		if(companyName != null) {
-			if(i!=0) sql+=" and";
-			sql+= " companyName="+"'"+companyName+"'";
-			i++;
-		}
-		if(salaryRate != -1){
-			if(i!=0) sql+=" and";
-			sql+= " salaryRate="+salaryRate;
-			i++;
-		}
-		if(positionType != null){
-			if(i!=0) sql+=" and";
-			sql+= " positionType="+"'"+positionType+"'";
-			i++;
-		}
-		if(location != null){
-			if(i!=0) sql+=" and";
-			sql+= " location ="+"'"+location +"'";
-			i++;
-		}
-		if(status != null){
-			if(i!=0) sql+=" and";
-			sql+= " status ="+"'"+status +"'";
-		}
-		sql +=";";
-		System.out.println(sql);
-		ResultSet rs = stmt.executeQuery(sql);
-		Job job;
-			//STEP 5: Extract data from result set
-		while(rs.next()){
-			job = new Job();
-			//Retrieve by column name
-			String id = rs.getString("jobId");
-			job.setKey(id);
-			job.setCompanyName(rs.getString("companyName"));
-			job.setSalaryRate(rs.getDouble("salaryRate"));
-			job.setPositionType(rs.getString("positionType"));
-			job.setLocation(rs.getString("location"));
-			job.setDetail(rs.getString("detail"));
-			job.setStatus(rs.getString("status"));
-			List <Link> links = new ArrayList<Link>();
-			Link k = new Link("/jobs/"+id,"details");
-			links.add(k);
-			job.setLink(links);
-			jobs.add(job);
-		}
-		rs.close();
-		stmt.close();
-		conn.close();
-		DataSource.returnConnection(conn);
-		return new JobsList(jobs);
-	}
-
-
-	public static Job updateJobById(String id,String companyName, double salaryRate, String positionType,
-			String location, String detail, String status) throws ClassNotFoundException, SQLException, CustomException {
-		System.out.println(status);
-		Job job = DBOperationJobs.getJobById(id);
-	    System.out.println(job.toString());
-		int preStatus = StatusDao.instance.getStatus().get(job.getStatus());
-		int currStatus = StatusDao.instance.getStatus().get(status);
-		System.out.println("status = "+preStatus+"afasf= "+ currStatus);
-		if(preStatus>currStatus) throw new CustomException(Status.BAD_REQUEST,"can not roll status back"); 
-		
-		Connection conn =  DataSource.getConnection();
-	    System.out.println("Opened database successfully");
-	    Statement stmt = conn.createStatement();
-	    String sql = "UPDATE JOBS" +
-	              " set companyName="+"'"+companyName+"'"+", salaryRate="+salaryRate+", positionType="+"'"+positionType+"'"+
-	              ", location="+"'"+location+"'"+", detail="+"'"+detail+"'"+", status="+"'"+status+"'"+
-	              " where jobId="+"'"+id+"'";
-	    System.out.println(sql);
-	    stmt.executeUpdate(sql);
-	    stmt.close();
-	    conn.close();
-	    DataSource.returnConnection(conn);
-	    job = DBOperationJobs.getJobById(id);
-		return job;
-	}
-	
-	
-//	public static void updateJobById(String id, String detail) throws SQLException, ClassNotFoundException {
-//	 	Connection conn =  DataSource.getConnection();
-//	    System.out.println("Opened database successfully");
-//	    Statement stmt = conn.createStatement();
-//	    String sql = "UPDATE JOBS" +
-//	              " set user_name=?, sex=?, age=?, birthday=?, email=?, mobile=?,"+
-//	              " update_user=?, update_date=CURRENT_DATE(), isdel=? "+
-//	              " where jobId="+"'"+id+"'";
-//	    System.out.println(sql);
-//	    stmt.executeUpdate(sql);
-//	    stmt.close();
-//	    conn.close();
-//	    DataSource.returnConnection(conn);
-//	    System.out.println("Records delete successfully");
-//
-//	}
 
 }

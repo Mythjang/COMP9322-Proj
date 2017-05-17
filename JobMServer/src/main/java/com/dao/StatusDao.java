@@ -11,8 +11,9 @@ import java.util.Map;
 
 	    private StatusDao() {
 	    	status.put("open", 1);
-	    	status.put("inReview", 2);
-	    	status.put("close", 3);
+	    	status.put("appReceived",2);
+	    	status.put("inReview", 3);
+	    	status.put("close", 4);
 	    }
 
 
